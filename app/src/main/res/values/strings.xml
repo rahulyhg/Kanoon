@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Kanoon</string>
+    <string name="lbl_welcome">Welcome</string>
+    <string name="lbl_request_message">Just enter your mobile and get started</string>
+    <string name="lbl_join">Join as Lawyer</string>
+    <string name="lbl_mobile_number">Mobile Number</string>
+    <string name="lbl_91">+91</string>
+    <string name="lbl_are_you_new">Are you new ?</string>
 </resources>
