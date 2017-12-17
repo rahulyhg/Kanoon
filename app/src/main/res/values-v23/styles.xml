@@ -14,7 +14,6 @@
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_launcher_foreground</item>
     </style>
     <style name="NoAppbarAppTheme" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="colorPrimary">@color/colorPrimary</item>

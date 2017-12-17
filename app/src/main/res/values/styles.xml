@@ -13,7 +13,6 @@
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppTheme.PopupMenu</item>
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_launcher_foreground</item>
     </style>
 
     <style name="Widget.AppTheme.ActionBar" parent="Widget.AppCompat.ActionBar.Solid">
