@@ -6,4 +6,5 @@
     <string name="lbl_mobile_number">Mobile Number</string>
     <string name="lbl_91">+91</string>
     <string name="lbl_are_you_new">Are you new ?</string>
+    <string name="lbl_log_in">Log in</string>
 </resources>

@@ -17,7 +17,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Log in"
+                android:text="@string/lbl_log_in"
                 android:fontFamily="@font/regular_xml"
                 android:textStyle="bold"
                 android:background="@color/colorAccent"
