@@ -101,10 +101,11 @@ public class KextView extends android.support.v7.widget.AppCompatTextView {
                 typedArray.recycle();
             }
         }else {
-            apply(ResourcesCompat.getFont(getContext(),R.font.regular_xml),style,DISTANCE.NORMAL);
+            //apply(ResourcesCompat.getFont(getContext(),R.font.regular_xml),style,DISTANCE.NORMAL);
             setTypeface(ResourcesCompat.getFont(getContext(),R.font.regular_xml),style);
             setLetterSpacing(0);
         }
+        invalidate();
     }
 
     private void apply(Typeface typeface,int style, float space){
