@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "27169771741",
+    "firebase_url": "https://kanoon-dfa27.firebaseio.com",
+    "project_id": "kanoon-dfa27",
+    "storage_bucket": "kanoon-dfa27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27169771741:android:16d35bab3144ea0e",
+        "android_client_info": {
+          "package_name": "com.rvsoftlab.kanoon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "27169771741-n6r56ek5nio5nq9kncuktsglourtivop.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rvsoftlab.kanoon",
+            "certificate_hash": "45f2bff172bbfad855827e61fca7ce79cc4dc576"
+          }
+        },
+        {
+          "client_id": "27169771741-ev8hdd937vp0lucdir1lga8lr20j6rb1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDlAHV7RpE23Ua3mdzF8RxeR_sFrhxePE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "27169771741-ev8hdd937vp0lucdir1lga8lr20j6rb1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
