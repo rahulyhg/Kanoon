@@ -26,7 +26,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    //region Firebase
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.firebase:firebase-database:11.8.0'
+    //endregion
+
+    //region Volley
+    compile 'com.android.volley:volley:1.0.0'
+    //endregion
 }
 apply plugin: 'com.google.gms.google-services'

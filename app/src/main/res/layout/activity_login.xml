@@ -131,6 +131,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold" />
+
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
