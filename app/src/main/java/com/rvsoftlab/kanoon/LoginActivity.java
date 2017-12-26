@@ -21,8 +21,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String TAG = LoginActivity.class.getSimpleName();
     private FirebaseUser user;
+    private FirebaseDatabase database;
+    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +59,24 @@ public class LoginActivity extends AppCompatActivity {
         });
         mAuth = FirebaseAuth.getInstance();
         requestQueue = Volley.newRequestQueue(this);
+        database = FirebaseDatabase.getInstance();
+        db = FirebaseFirestore.getInstance();
+        getData();
+    }
+
+    private void getData() {
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                    }
+                } else {
+                    Log.w(TAG, "Error getting documents.", task.getException());
+                }
+            }
+        });
     }
 
     private void authenticate() {
@@ -116,6 +145,17 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
+            /*DatabaseReference ref = database.getReference("social/users/"+user.getUid());
+            ref.setValue(user.getUid());*/
+            Map<String,Map<String,Object>> parmas = new HashMap<>();
+            Map<String,Object> userparam = new HashMap<>();
+            userparam.put("created_at","created_at_timestamp");
+            userparam.put("custom_id", new Random(10).toString());
+            userparam.put("email","");
+            userparam.put("enabled",true);
+            parmas.put(user.getUid()+"1",userparam);
+            String pushId = database.getReference().getRef().push().getKey();
+            database.getReference().getRef().child("social/users").child(user.getUid()+"1").setValue(userparam);
         }
     }
 }

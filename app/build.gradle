@@ -29,6 +29,7 @@ dependencies {
     //region Firebase
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.firebase:firebase-database:11.8.0'
+    compile 'com.google.firebase:firebase-firestore:11.8.0'
     //endregion
 
     //region Volley
