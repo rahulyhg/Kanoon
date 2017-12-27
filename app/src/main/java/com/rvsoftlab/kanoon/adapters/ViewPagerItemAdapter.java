@@ -38,7 +38,7 @@ public class ViewPagerItemAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        return viewList.get(position);
+        return activity.findViewById(viewList.get(position));
     }
 
     @Override
