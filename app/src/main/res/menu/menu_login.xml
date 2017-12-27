@@ -7,4 +7,12 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         app:actionLayout="@layout/layout_menu_login"/>
+
+    <item
+        android:id="@+id/action_next"
+        android:title="@string/lbl_join"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        app:actionLayout="@layout/layout_menu_next"/>
+
 </menu>

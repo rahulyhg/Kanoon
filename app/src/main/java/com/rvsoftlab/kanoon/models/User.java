@@ -1,4 +1,4 @@
-package com.rvsoftlab.kanoon.model;
+package com.rvsoftlab.kanoon.models;
 
 /**
  * Created by RVishwakarma on 12/26/2017.

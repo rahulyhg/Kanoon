@@ -27,6 +27,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
+import com.rvsoftlab.kanoon.view.KiewPager;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -42,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseDatabase database;
     FirebaseFirestore db;
+    private Menu menu;
+    private KiewPager viewPager;
+    private ViewPagerItemAdapter pagerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +66,15 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         database = FirebaseDatabase.getInstance();
         db = FirebaseFirestore.getInstance();
-        getData();
+        viewPager = findViewById(R.id.view_pager);
+        //getData();
+        setupViewpager();
+    }
+
+    private void setupViewpager() {
+        pagerAdapter = new ViewPagerItemAdapter(this);
+        pagerAdapter.addView(R.id.mobile_holder,"Mobile Verification");
+        viewPager.setAdapter(pagerAdapter);
     }
 
     private void getData() {
@@ -111,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        //region JOIN
         MenuItem menuItem = menu.findItem(R.id.action_join);
         View view = menuItem.getActionView();
         Button join = view.findViewById(R.id.btn_join);
@@ -120,20 +134,30 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
             }
         });
+        //endregion
+        //region NEXT
+        MenuItem nextItem = menu.findItem(R.id.action_next);
+        View nextView = nextItem.getActionView();
+        Button next = nextView.findViewById(R.id.btn_next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        //endregion
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_login,menu);
+        //this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==R.id.action_join){
-            Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -146,7 +170,7 @@ public class LoginActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
             /*DatabaseReference ref = database.getReference("social/users/"+user.getUid());
-            ref.setValue(user.getUid());*/
+            ref.setValue(user.getUid());*//*
             Map<String,Map<String,Object>> parmas = new HashMap<>();
             Map<String,Object> userparam = new HashMap<>();
             userparam.put("created_at","created_at_timestamp");
@@ -155,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
             userparam.put("enabled",true);
             parmas.put(user.getUid()+"1",userparam);
             String pushId = database.getReference().getRef().push().getKey();
-            database.getReference().getRef().child("social/users").child(user.getUid()+"1").setValue(userparam);
+            database.getReference().getRef().child("social/users").child(user.getUid()+"1").setValue(userparam);*/
         }
     }
 }
