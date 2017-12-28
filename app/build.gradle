@@ -35,5 +35,7 @@ dependencies {
     //region Volley
     compile 'com.android.volley:volley:1.0.0'
     //endregion
+
+    compile 'com.github.stfalcon:smsverifycatcher:0.3.1'
 }
 apply plugin: 'com.google.gms.google-services'
