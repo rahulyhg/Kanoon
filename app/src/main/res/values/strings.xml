@@ -8,4 +8,7 @@
     <string name="lbl_are_you_new">Are you new ?</string>
     <string name="lbl_log_in">Log in</string>
     <string name="lbl_next">Next</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

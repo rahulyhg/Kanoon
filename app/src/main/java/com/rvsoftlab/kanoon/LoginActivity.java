@@ -1,5 +1,9 @@
 package com.rvsoftlab.kanoon;
 
+import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +11,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -47,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     private Menu menu;
     private KiewPager viewPager;
     private ViewPagerItemAdapter pagerAdapter;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //authenticate();
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
             }
         });
         mAuth = FirebaseAuth.getInstance();
@@ -67,8 +75,36 @@ public class LoginActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         db = FirebaseFirestore.getInstance();
         viewPager = findViewById(R.id.view_pager);
+
+        progressBar = findViewById(R.id.time_progress);
         //getData();
         setupViewpager();
+        //showProgress();
+    }
+
+    private void showProgress() {
+        final int[] sec = {0};
+        final int oneMin = 60 * 1000; // 1 minute in milli seconds
+        final int[] total = {0};
+        progressBar.setProgress(0);
+        progressBar.setMax(100*100);
+        new CountDownTimer(oneMin,1000){
+            @Override
+            public void onTick(long timePassed) {
+                //int total = (int) (timePassed/oneMin*60);
+                /*progressBar.setProgress(total[0]++);
+                Log.d(TAG,String.valueOf(total[0]));*/
+                ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", total[0]++*100);
+                animation.setDuration(500); // 0.5 second
+                animation.setInterpolator(new DecelerateInterpolator());
+                animation.start();
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
     }
 
     private void setupViewpager() {
@@ -167,9 +203,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         user = mAuth.getCurrentUser();
         if (user==null){
-            Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
         }else {
-            Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
             /*DatabaseReference ref = database.getReference("social/users/"+user.getUid());
             ref.setValue(user.getUid());*//*
             Map<String,Map<String,Object>> parmas = new HashMap<>();
