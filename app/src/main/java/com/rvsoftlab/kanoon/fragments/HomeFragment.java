@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.rvsoftlab.kanoon.MainActivity;
 import com.rvsoftlab.kanoon.R;
 
 /**
@@ -44,7 +43,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        ((MainActivity)mActivity).setSupportActionBar(toolbar);
+        //((MainActivity)mActivity).setSupportActionBar(toolbar);
         toolbar.setTitle("Home");
         setHasOptionsMenu(true);
         return view;

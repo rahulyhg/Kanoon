@@ -1,11 +1,9 @@
-package com.rvsoftlab.kanoon;
+package com.rvsoftlab.kanoon.activities;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,21 +25,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.rvsoftlab.kanoon.R;
 import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
 import com.rvsoftlab.kanoon.view.KiewPager;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppBaseActivity {
 
     Button btnLogin;
     private FirebaseAuth mAuth;

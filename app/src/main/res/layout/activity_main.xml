@@ -1,8 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.rvsoftlab.kanoon.view.KiewPagerVertical xmlns:android="http://schemas.android.com/apk/res/android"
+<io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rvsoftlab.kanoon.MainActivity"
-    android:id="@+id/main_view_pager"/>
+    tools:context="com.rvsoftlab.kanoon.activities.MainActivity"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            android:layout_alignParentTop="true"/>
+        <com.rvsoftlab.kanoon.view.KiewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_navigation"
+            android:layout_below="@id/toolbar">
+
+        </com.rvsoftlab.kanoon.view.KiewPager>
+        <!--<android.support.design.widget.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/bottom_navigation"
+            app:itemBackground="@color/colorPrimary"
+            app:itemTextColor="@android:color/black"
+            app:menu="@menu/menu_bottom"/>-->
+        <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemBackground="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_bottom"
+            app:elevation="2dp"
+            android:id="@+id/bottom_navigation"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/dr_shutter"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/colorForeground"
+        app:borderWidth="0dp"
+        app:elevation="9dp"
+        android:layout_gravity="bottom|center"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorForeground"
+        android:id="@+id/view"
+        android:visibility="gone"/>
+</io.codetail.widget.RevealFrameLayout>
