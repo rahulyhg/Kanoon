@@ -1,1 +1,1 @@
-include ':app', ':smsverifycatcher'
+include ':app', ':smsverifycatcher', ':camerabutton'

@@ -4,8 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kanoon.iml" filepath="$PROJECT_DIR$/Kanoon.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/camerabutton/camerabutton.iml" filepath="$PROJECT_DIR$/camerabutton/camerabutton.iml" />
       <module fileurl="file://$PROJECT_DIR$/smsverifycatcher/smsverifycatcher.iml" filepath="$PROJECT_DIR$/smsverifycatcher/smsverifycatcher.iml" />
-      <module fileurl="file://D:\Development\Rv\Project\Kanoon\smsverifycatcher\smsverifycatcher.iml" filepath="D:\Development\Rv\Project\Kanoon\smsverifycatcher\smsverifycatcher.iml" />
     </modules>
   </component>
 </project>

@@ -1,11 +1,13 @@
 package com.rvsoftlab.kanoon.activities;
 
 import android.animation.Animator;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
@@ -15,20 +17,27 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.dewarder.camerabutton.CameraButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.otaliastudios.cameraview.CameraView;
 import com.rvsoftlab.kanoon.R;
+import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
 import com.rvsoftlab.kanoon.helper.BottomNavigationViewHelper;
+import com.rvsoftlab.kanoon.view.KiewPager;
 
 import io.codetail.animation.ViewAnimationUtils;
 
 public class MainActivity extends AppBaseActivity {
     private BottomNavigationViewEx navigationView;
-    private FloatingActionButton cameraButton;
+    //private FloatingActionButton cameraButton;
+    private CameraButton cameraButton;
     private CameraView cameraView;
     private RelativeLayout cameraContent;
+    private KiewPager kiewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +49,34 @@ public class MainActivity extends AppBaseActivity {
         navigationView.setTextVisibility(false);
         navigationView.setItemIconTintList(null);
 
-        cameraButton = findViewById(R.id.fab);
+        //cameraButton = findViewById(R.id.fab);
+        cameraButton = findViewById(R.id.fab_button);
         cameraView = findViewById(R.id.camera_preview);
+        kiewPager = findViewById(R.id.camera_viewpager);
+
         cameraContent = findViewById(R.id.camera_content);
+        cameraButton.setMainCircleRadius(28);
+        cameraButton.bringToFront();
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //cameraContent.setVisibility(View.VISIBLE);
+
+            }
+        });
+        cameraButton.setOnTapEventListener(new CameraButton.OnTapEventListener() {
+            @Override
+            public void onTap() {
                 expand(cameraContent,cameraButton);
             }
         });
+        setupViewPager();
+    }
 
+    private void setupViewPager() {
+        ViewPagerItemAdapter adapter = new ViewPagerItemAdapter(this);
+        adapter.addView(R.id.camera_holder,"Camera");
+        kiewPager.setAdapter(adapter);
     }
 
     public void expand(final View v, final View camera) {

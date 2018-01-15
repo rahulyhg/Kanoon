@@ -20,6 +20,7 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     private Activity mActivity;
     public static final String TAG = "KANOON";
     public FirebaseFirestore fireDb;
+    private static final long ANIMATION_TRANSLATION_DURATION = 200L;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,30 +43,42 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     }
 
     public void hideStatusBar(){
-        // Hide Status Bar
-        /*if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-        else {
-            View decorView = getWindow().getDecorView();
-            // Hide Status Bar.
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-        }*/
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     public void showStatusBar(){
-        /*if (Build.VERSION.SDK_INT < 16) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-        else {
-            View decorView = getWindow().getDecorView();
-            // Show Status Bar.
-            int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
-            decorView.setSystemUiVisibility(uiOptions);
-        }*/
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    public void translateToRight(View view, boolean show) {
+        float x = show ? 0f : view.getWidth();
+        float alpha = show ? 1f : 0f;
+        view.animate().translationX(-x)
+                .alpha(alpha)
+                .setDuration(ANIMATION_TRANSLATION_DURATION);
+    }
+
+    public void translateToLeft(View view, boolean show) {
+        float x = show ? 0f : view.getWidth();
+        float alpha = show ? 1f : 0f;
+        view.animate().translationX(x)
+                .alpha(alpha)
+                .setDuration(ANIMATION_TRANSLATION_DURATION);
+    }
+
+    public void translateToDown(View view, boolean show){
+        float y = show?0f:view.getHeight();
+        float alpha = show?1f:0f;
+        view.animate().translationY(y)
+                .alpha(alpha)
+                .setDuration(ANIMATION_TRANSLATION_DURATION);
+    }
+
+    public void translateToUp(View view, boolean show){
+        float y = show ? 0f : view.getHeight();
+        float alpha = show ? 1f : 0f;
+        view.animate().translationY(-y)
+                .alpha(alpha)
+                .setDuration(ANIMATION_TRANSLATION_DURATION);
     }
 }

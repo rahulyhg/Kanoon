@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 dependencies {
@@ -45,6 +49,6 @@ dependencies {
     implementation project(':smsverifycatcher')
     //Camera View
     compile 'com.otaliastudios:cameraview:1.4.1'
-
+    implementation project(':camerabutton')
 }
 apply plugin: 'com.google.gms.google-services'

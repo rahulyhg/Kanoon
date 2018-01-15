@@ -1,15 +1,38 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
+    ext {
+        min_sdk_version = 21
+        sdk_version = 21
+    }
+
+    ext {
+        kotlin_version = '1.2.0'
+        support_library_version = '26.1.0'
+        rxjava_version = '2.1.7'
+        rxjava_android_version = '2.0.1'
+
+        junit_version = '4.12'
+        robolectric_version = '3.5.1'
+        espresso_core_version = '3.0.1'
+        test_runner_version = '1.0.1'
+    }
+
+    ext {
+        publish_userOrg = 'dewarder'
+        publish_groupId = 'com.dewarder'
+        publish_website = 'https://github.com/dewarder/CameraButton'
+    }
+
     repositories {
         google()
         jcenter()
+        maven { url "https://maven.google.com" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.google.gms:google-services:3.1.0'
-
+        classpath 'com.novoda:bintray-release:0.8.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

@@ -5,21 +5,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/camera_content"
     android:visibility="gone">
-    <com.otaliastudios.cameraview.CameraView
+
+    <com.rvsoftlab.kanoon.view.KiewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:keepScreenOn="true"
-        app:cameraPlaySounds="false"
-        app:cameraGrid="off"
-        app:cameraFacing="back"
-        app:cameraFlash="auto"
-        app:cameraAudio="on"
-        app:cameraGestureTap="focusWithMarker"
-        app:cameraGestureLongTap="none"
-        app:cameraGesturePinch="zoom"
-        app:cameraJpegQuality="100"
-        app:cameraSessionType="picture"
-        android:id="@+id/camera_preview"
-        android:visibility="visible"/>
+        android:id="@+id/camera_viewpager">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/camera_holder">
+            <com.otaliastudios.cameraview.CameraView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:keepScreenOn="true"
+                app:cameraPlaySounds="false"
+                app:cameraGrid="off"
+                app:cameraFacing="back"
+                app:cameraFlash="auto"
+                app:cameraAudio="on"
+                app:cameraGestureTap="focusWithMarker"
+                app:cameraGestureLongTap="none"
+                app:cameraGesturePinch="zoom"
+                app:cameraJpegQuality="100"
+                app:cameraSessionType="picture"
+                android:id="@+id/camera_preview"
+                android:visibility="visible"/>
+            <com.dewarder.camerabutton.CameraButton
+                android:id="@+id/camera_button"
+                android:layout_width="@dimen/cb_layout_width_default"
+                android:layout_height="@dimen/cb_layout_height_default"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="24dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/camera_switch"
+                app:layout_constraintStart_toEndOf="@+id/gallery_switch"
+                />
+
+            <ImageView
+                android:id="@+id/gallery_switch"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/camera_button"
+                app:layout_constraintEnd_toStartOf="@+id/camera_button"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/camera_button"
+                app:srcCompat="@drawable/ic_gallery"/>
+
+            <ImageView
+                android:id="@+id/camera_switch"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/camera_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/camera_button"
+                app:layout_constraintTop_toTopOf="@+id/camera_button"
+                app:srcCompat="@drawable/ic_sync_white_36dp"/>
+        </android.support.constraint.ConstraintLayout>
+    </com.rvsoftlab.kanoon.view.KiewPager>
 </RelativeLayout>
