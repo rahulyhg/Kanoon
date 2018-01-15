@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -27,6 +28,7 @@ public class MainActivity extends AppBaseActivity {
     private BottomNavigationViewEx navigationView;
     private FloatingActionButton cameraButton;
     private CameraView cameraView;
+    private RelativeLayout cameraContent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +42,18 @@ public class MainActivity extends AppBaseActivity {
 
         cameraButton = findViewById(R.id.fab);
         cameraView = findViewById(R.id.camera_preview);
+        cameraContent = findViewById(R.id.camera_content);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cameraView.setVisibility(View.VISIBLE);
-                expand(cameraView,cameraButton);
+                //cameraContent.setVisibility(View.VISIBLE);
+                expand(cameraContent,cameraButton);
             }
         });
 
     }
 
-    public void expand(View v, final View camera) {
+    public void expand(final View v, final View camera) {
         int cx = (camera.getLeft()+camera.getRight())/2;
         int cy = (camera.getTop()+camera.getBottom())/2;
 
@@ -62,12 +65,14 @@ public class MainActivity extends AppBaseActivity {
 
         Animator animator = ViewAnimationUtils.createCircularReveal(v,cx,cy,0,finalRadius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(1500);
+        animator.setDuration(1000);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
+                v.setVisibility(View.VISIBLE);
                 getSupportActionBar().hide();
                 cameraView.start();
+                hideStatusBar();
             }
 
             @Override
@@ -87,6 +92,44 @@ public class MainActivity extends AppBaseActivity {
         });
         animator.start();
 
+    }
+
+    public void collapse(final View v, View toRadiusView){
+        int cx = (toRadiusView.getLeft()+toRadiusView.getRight())/2;
+        int cy = (toRadiusView.getTop()+toRadiusView.getBottom())/2;
+
+        int maxHeight = v.getHeight();
+        int maxWidth = v.getWidth();
+
+        float finalRadius = (float)Math.hypot(maxHeight,maxWidth);
+
+        Animator animator = ViewAnimationUtils.createCircularReveal(v,cx,cy,finalRadius,0);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(1000);
+        animator.start();
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                v.setVisibility(View.GONE);
+                showStatusBar();
+                cameraView.stop();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
     }
 
     @Override
@@ -119,6 +162,12 @@ public class MainActivity extends AppBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         cameraView.destroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        collapse(cameraContent,cameraButton);
+        //super.onBackPressed();
     }
 
     //endregion

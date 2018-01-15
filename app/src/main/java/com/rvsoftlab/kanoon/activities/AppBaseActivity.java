@@ -2,9 +2,12 @@ package com.rvsoftlab.kanoon.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.WindowManager;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -36,5 +39,33 @@ public abstract class AppBaseActivity extends AppCompatActivity {
         if (progressDialog.isShowing()){
             progressDialog.dismiss();
         }
+    }
+
+    public void hideStatusBar(){
+        // Hide Status Bar
+        /*if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        else {
+            View decorView = getWindow().getDecorView();
+            // Hide Status Bar.
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }*/
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    public void showStatusBar(){
+        /*if (Build.VERSION.SDK_INT < 16) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        else {
+            View decorView = getWindow().getDecorView();
+            // Show Status Bar.
+            int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+            decorView.setSystemUiVisibility(uiOptions);
+        }*/
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }
