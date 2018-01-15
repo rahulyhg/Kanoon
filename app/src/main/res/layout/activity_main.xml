@@ -53,10 +53,21 @@
         app:borderWidth="0dp"
         app:elevation="9dp"
         android:layout_gravity="bottom|center"/>
-    <View
+    <com.otaliastudios.cameraview.CameraView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorForeground"
-        android:id="@+id/view"
-        android:visibility="gone"/>
+        android:layout_gravity="center"
+        android:keepScreenOn="true"
+        app:cameraPlaySounds="false"
+        app:cameraGrid="off"
+        app:cameraFacing="back"
+        app:cameraFlash="auto"
+        app:cameraAudio="on"
+        app:cameraGestureTap="focusWithMarker"
+        app:cameraGestureLongTap="none"
+        app:cameraGesturePinch="zoom"
+        app:cameraJpegQuality="100"
+        app:cameraSessionType="picture"
+        android:id="@+id/camera_preview"
+        android:visibility="visible"/>
 </io.codetail.widget.RevealFrameLayout>

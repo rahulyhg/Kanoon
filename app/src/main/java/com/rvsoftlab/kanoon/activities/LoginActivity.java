@@ -1,6 +1,7 @@
 package com.rvsoftlab.kanoon.activities;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -11,9 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,19 +29,32 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.rvsoftlab.kanoon.R;
 import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
+import com.rvsoftlab.kanoon.helper.Constants;
+import com.rvsoftlab.kanoon.helper.Helper;
 import com.rvsoftlab.kanoon.view.KiewPager;
+import com.stfalcon.smsverifycatcher.OnSmsCatchListener;
+import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppBaseActivity {
 
     Button btnLogin;
     private FirebaseAuth mAuth;
     private RequestQueue requestQueue;
-    private String TAG = LoginActivity.class.getSimpleName();
+
     private FirebaseUser user;
     private FirebaseDatabase database;
     FirebaseFirestore db;
@@ -46,6 +62,15 @@ public class LoginActivity extends AppBaseActivity {
     private KiewPager viewPager;
     private ViewPagerItemAdapter pagerAdapter;
     private ProgressBar progressBar;
+
+    private EditText editMobile;
+    private EditText editOtp;
+    private EditText editUser;
+    private SmsVerifyCatcher smsVerifyCatcher;
+    private Activity mActivity;
+    private String userMobile;
+    private String userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,29 +83,97 @@ public class LoginActivity extends AppBaseActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //authenticate();
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                switch (viewPager.getCurrentItem()){
+                    case 0:
+                        if (isSteponeOk()){
+                            registerLoginUser(editMobile.getText().toString());
+                        }
+                        break;
+                    case 1:
+                        if (isSteptwoOk()){
+                            authenticate();
+                        }
+                        break;
+                }
             }
         });
         mAuth = FirebaseAuth.getInstance();
         requestQueue = Volley.newRequestQueue(this);
         database = FirebaseDatabase.getInstance();
         db = FirebaseFirestore.getInstance();
-        viewPager = findViewById(R.id.view_pager);
 
+        //region VARIABLE INIT
+        viewPager = findViewById(R.id.view_pager);
         progressBar = findViewById(R.id.time_progress);
+        editMobile = findViewById(R.id.edit_mobile);
+        editOtp = findViewById(R.id.edit_otp);
+        editUser = findViewById(R.id.edit_user);
+
+        mActivity = this;
+        //endregion
+
+        //region SMS CATCHER
+        smsVerifyCatcher = new SmsVerifyCatcher(this, new OnSmsCatchListener<String>() {
+            @Override
+            public void onSmsCatch(String message) {
+                editOtp.setText(parseCode(message));
+                showProgress(true);
+            }
+        });
+        smsVerifyCatcher.setPhoneNumberFilter(Constants.SMS_SENDER);
+        //endregion
+
         //getData();
         setupViewpager();
         //showProgress();
     }
 
-    private void showProgress() {
+    private void setupViewpager() {
+        pagerAdapter = new ViewPagerItemAdapter(this);
+        pagerAdapter.addView(R.id.mobile_holder,"Mobile Verification");
+        pagerAdapter.addView(R.id.user_holder,"User");
+        viewPager.setAdapter(pagerAdapter);
+    }
+
+    private boolean isSteponeOk() {
+        boolean isOk;
+        if (editMobile.getText().toString().equals("")){
+            editMobile.setError("Please Enter Mobile No.");
+            isOk = false;
+        }else if (editMobile.getText().toString().length()<10){
+            editMobile.setError("Please Enter Valid Text");
+            editMobile.requestFocus();
+            isOk = false;
+        }else {
+            isOk = true;
+        }
+        return isOk;
+    }
+
+    private boolean isSteptwoOk() {
+        boolean isOk;
+        if (editUser.getText().toString().equals("")){
+            editUser.setError("Please Enter your name");
+            editUser.requestFocus();
+            isOk = false;
+        }else if (editOtp.getText().toString().equals("")){
+            editOtp.setError("Please Enter OTP");
+            editOtp.requestFocus();
+            isOk = false;
+        }else {
+            isOk = true;
+        }
+        return isOk;
+    }
+
+    private void showProgress(boolean isCancel) {
         final int[] sec = {0};
         final int oneMin = 60 * 1000; // 1 minute in milli seconds
         final int[] total = {0};
         progressBar.setProgress(0);
         progressBar.setMax(100*100);
-        new CountDownTimer(oneMin,1000){
+
+        CountDownTimer timer = new CountDownTimer(oneMin,1000){
             @Override
             public void onTick(long timePassed) {
                 //int total = (int) (timePassed/oneMin*60);
@@ -96,13 +189,100 @@ public class LoginActivity extends AppBaseActivity {
             public void onFinish() {
 
             }
-        }.start();
+        };
+        if (!isCancel){
+            timer.start();
+        }else {
+            timer.cancel();
+        }
     }
 
-    private void setupViewpager() {
-        pagerAdapter = new ViewPagerItemAdapter(this);
-        pagerAdapter.addView(R.id.mobile_holder,"Mobile Verification");
-        viewPager.setAdapter(pagerAdapter);
+    private void registerLoginUser(final String mobile) {
+        showLoading();
+        if (Helper.isNetworkAvailable(mActivity)){
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.API, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    hideLoading();
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        if (json.getBoolean("success")){
+                            JSONObject user = json.getJSONObject("response");
+                            userMobile = user.optString("mobile","");
+                            userName = user.optString("Ravikant","");
+                            viewPager.setCurrentItem(1,true);
+                            showProgress(false);
+                        }else {
+                            Toast.makeText(mActivity, json.optString("error",""), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    hideLoading();
+                    Helper.requestErrorHandling(mActivity,error);
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String,String> param = new HashMap<>();
+                    param.put("tag","AUTH");
+                    param.put("mobile",mobile);
+                    return param;
+                }
+            };
+            requestQueue.add(stringRequest);
+        }else {
+            Toast.makeText(mActivity, "Please check your network", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void authenticate() {
+        showLoading();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.API, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                hideLoading();
+                Log.d(TAG,response);
+                try {
+                    JSONObject json = new JSONObject(response);
+                    if (json.getBoolean("success")){
+                        JSONObject res = json.optJSONObject("response");
+                        signInWithFirebase(res.getString("token"));
+                    }else {
+                        Toast.makeText(mActivity, json.optString("error",""), Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideLoading();
+                Helper.requestErrorHandling(mActivity,error);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> value = new HashMap<>();
+                value.put("tag","verify");
+                value.put("mobile",userMobile);
+                value.put("code",editOtp.getText().toString());
+                value.put("username",userName);
+                return value;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    private String parseCode(String message) {
+        return message.replaceAll("[^0-9]", "");
     }
 
     private void getData() {
@@ -120,21 +300,7 @@ public class LoginActivity extends AppBaseActivity {
         });
     }
 
-    private void authenticate() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://rvsoft.esy.es/Android/kanoon/firebase.php", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG,response);
-                signInWithFirebase(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
-            }
-        });
-        requestQueue.add(stringRequest);
-    }
 
     private void signInWithFirebase(String token) {
         mAuth.signInWithCustomToken(token).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -142,7 +308,13 @@ public class LoginActivity extends AppBaseActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     user = task.getResult().getUser();
-                    Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                    DocumentReference ref = fireDb.collection("users").document(user.getUid());
+                    Map<String,String> userData = new HashMap<>();
+                    userData.put("name",userName);
+                    userData.put("mobile",userMobile);
+                    ref.set(userData);
+                    startActivity(new Intent(mActivity,MainActivity.class));
+                    finish();
                 }else {
                     task.getException().printStackTrace();
                 }
@@ -191,9 +363,30 @@ public class LoginActivity extends AppBaseActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        smsVerifyCatcher.onRequestPermissionsResult(requestCode,permissions,grantResults);
+    }
+
+    //region LIFECYCLE
+    @Override
+    protected void onStop() {
+        super.onStop();
+        smsVerifyCatcher.onStop();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
+        smsVerifyCatcher.onStart();
         user = mAuth.getCurrentUser();
+        if (user!=null){
+            Toast.makeText(mActivity, user.getUid(), Toast.LENGTH_SHORT).show();
+
+            startActivity(new Intent(mActivity,MainActivity.class));
+            finish();
+
+        }
         if (user==null){
             //Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
         }else {
@@ -211,4 +404,5 @@ public class LoginActivity extends AppBaseActivity {
             database.getReference().getRef().child("social/users").child(user.getUid()+"1").setValue(userparam);*/
         }
     }
+    //endregion
 }

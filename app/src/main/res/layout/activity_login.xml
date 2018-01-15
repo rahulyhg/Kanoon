@@ -24,7 +24,7 @@
                 android:background="@color/colorAccent"
                 android:fontFamily="@font/regular_xml"
                 android:letterSpacing="0.3"
-                android:text="@string/lbl_log_in"
+                android:text="Next"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold" />
@@ -51,13 +51,7 @@
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
-                <ProgressBar
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginEnd="100dp"
-                    android:progressBackgroundTint="@android:color/transparent"
-                    android:id="@+id/time_progress"/>
+
 
 
             </LinearLayout>
@@ -119,7 +113,8 @@
                             android:inputType="phone"
                             android:maxLength="10"
                             android:textColor="@color/colorBlack"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:id="@+id/edit_mobile"/>
 
                     </LinearLayout>
                     <View
@@ -128,7 +123,159 @@
                         android:background="@android:color/darker_gray"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Whatever you do will be insignificant but it i svery importnatn that you do it."
+                            android:textAlignment="center"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_centerInParent="true"
+                            android:id="@+id/quote"
+                            android:fontFamily="@font/nexa_bold"
+                            android:textColor="@color/colorAccent"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:id="@+id/author"
+                            android:layout_below="@id/quote"
+                            android:text="- Mahatma Gandhi"
 
+                            android:fontFamily="@font/light_xml"
+                            android:textStyle="italic"/>
+                    </RelativeLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp"
+                    android:id="@+id/user_holder">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/thin_xml"
+                        android:text="Just Enter Name and OTP"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/user_container">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/thin_xml"
+                            android:text="Full Name"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="30dp"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/thin_xml"
+                            android:background="@android:color/transparent"
+                            android:backgroundTint="@android:color/transparent"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="20sp"
+                            android:id="@+id/edit_user"
+                            android:textAlignment="center"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/thin_xml"
+                            android:text="OTP"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="30dp"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/thin_xml"
+                            android:background="@android:color/transparent"
+                            android:backgroundTint="@android:color/transparent"
+                            android:inputType="phone"
+                            android:maxLength="5"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="20sp"
+                            android:id="@+id/edit_otp"
+                            android:textAlignment="center"/>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_centerInParent="true"/>
+                            <ProgressBar
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:progressBackgroundTint="@android:color/transparent"
+                                android:id="@+id/time_progress"
+                                />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Whatever you do will be insignificant but it i svery importnatn that you do it."
+                                android:textAlignment="center"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_centerInParent="true"
+                                android:id="@+id/quote2"
+                                android:fontFamily="@font/nexa_bold"
+                                android:textColor="@color/colorAccent"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:id="@+id/author2"
+                                android:layout_below="@id/quote2"
+                                android:text="- Mahatma Gandhi"
+                                android:fontFamily="@font/light_xml"
+                                android:textStyle="italic"
+                                android:layout_gravity="center"/>
+                        </LinearLayout>
+                    </ScrollView>
                 </LinearLayout>
             </com.rvsoftlab.kanoon.view.KiewPager>
 
