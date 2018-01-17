@@ -37,13 +37,12 @@
                 android:layout_height="@dimen/cb_layout_height_default"
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginBottom="24dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/camera_switch"
-                app:layout_constraintStart_toEndOf="@+id/gallery_switch"
-                />
+                app:layout_constraintStart_toEndOf="@+id/gallery_switch"/>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/gallery_switch"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
@@ -54,9 +53,11 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/camera_button"
-                app:srcCompat="@drawable/ic_gallery"/>
+                app:srcCompat="@drawable/ic_gallery"
+                android:background="@android:color/transparent"
+                android:scaleType="centerCrop"/>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/camera_switch"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
@@ -66,7 +67,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/camera_button"
                 app:layout_constraintTop_toTopOf="@+id/camera_button"
-                app:srcCompat="@drawable/ic_sync_white_36dp"/>
+                app:srcCompat="@drawable/ic_sync_white_36dp"
+                android:background="@android:color/transparent"/>
         </android.support.constraint.ConstraintLayout>
     </com.rvsoftlab.kanoon.view.KiewPager>
 </RelativeLayout>

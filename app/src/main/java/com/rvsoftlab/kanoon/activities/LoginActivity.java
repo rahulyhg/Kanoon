@@ -274,7 +274,7 @@ public class LoginActivity extends AppBaseActivity {
                 value.put("tag","verify");
                 value.put("mobile",userMobile);
                 value.put("code",editOtp.getText().toString());
-                value.put("username",userName);
+                value.put("username",editUser.getText().toString());
                 return value;
             }
         };
@@ -381,7 +381,7 @@ public class LoginActivity extends AppBaseActivity {
         smsVerifyCatcher.onStart();
         user = mAuth.getCurrentUser();
         if (user!=null){
-            Toast.makeText(mActivity, user.getUid(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mActivity, user.getUid(), Toast.LENGTH_SHORT).show();
 
             startActivity(new Intent(mActivity,MainActivity.class));
             finish();

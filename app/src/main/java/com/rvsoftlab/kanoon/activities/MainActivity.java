@@ -3,74 +3,157 @@ package com.rvsoftlab.kanoon.activities;
 import android.animation.Animator;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.dewarder.camerabutton.CameraButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.otaliastudios.cameraview.CameraListener;
+import com.otaliastudios.cameraview.CameraUtils;
 import com.otaliastudios.cameraview.CameraView;
+import com.otaliastudios.cameraview.Facing;
+import com.otaliastudios.cameraview.SessionType;
 import com.rvsoftlab.kanoon.R;
 import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
 import com.rvsoftlab.kanoon.helper.BottomNavigationViewHelper;
 import com.rvsoftlab.kanoon.view.KiewPager;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import io.codetail.animation.ViewAnimationUtils;
 
 public class MainActivity extends AppBaseActivity {
     private BottomNavigationViewEx navigationView;
-    //private FloatingActionButton cameraButton;
+    //private FloatingActionButton fabCamera;
     private CameraButton cameraButton;
     private CameraView cameraView;
     private RelativeLayout cameraContent;
     private KiewPager kiewPager;
+    private ImageButton fabCamera;
+    private ImageButton gallerySwitch;
+    private ImageButton cameraSwitch;
+    private boolean isExpand = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //region BOTTOM NAVIGATION
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.enableAnimation(true);
         navigationView.enableItemShiftingMode(false);
         navigationView.enableShiftingMode(false);
         navigationView.setTextVisibility(false);
         navigationView.setItemIconTintList(null);
+        //endregion
 
-        //cameraButton = findViewById(R.id.fab);
-        cameraButton = findViewById(R.id.fab_button);
+        //region CAMERA BUTTON
+        cameraButton = findViewById(R.id.camera_button);
         cameraView = findViewById(R.id.camera_preview);
         kiewPager = findViewById(R.id.camera_viewpager);
-
         cameraContent = findViewById(R.id.camera_content);
-        cameraButton.setMainCircleRadius(28);
-        cameraButton.bringToFront();
-        cameraButton.setOnClickListener(new View.OnClickListener() {
+        fabCamera = findViewById(R.id.fab_camera);
+        gallerySwitch = findViewById(R.id.gallery_switch);
+        cameraSwitch = findViewById(R.id.camera_switch);
+
+        //region LISTENERS
+        fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //cameraContent.setVisibility(View.VISIBLE);
-
+                if (!isExpand)
+                    expand(cameraContent,fabCamera);
             }
         });
+
         cameraButton.setOnTapEventListener(new CameraButton.OnTapEventListener() {
             @Override
             public void onTap() {
-                expand(cameraContent,cameraButton);
+                capture();
             }
         });
+        cameraButton.setOnStateChangeListener(new CameraButton.OnStateChangeListener() {
+            @Override
+            public void onStateChanged(@NonNull CameraButton.State state) {
+                if (state == CameraButton.State.START_EXPANDING){
+                    translateToLeft(cameraSwitch,false);
+                    translateToRight(gallerySwitch,false);
+                }else if (state == CameraButton.State.START_COLLAPSING){
+                    translateToLeft(cameraSwitch,true);
+                    translateToRight(gallerySwitch,true);
+                }
+            }
+        });
+        cameraButton.setOnHoldEventListener(new CameraButton.OnHoldEventListener() {
+            @Override
+            public void onStart() {
+                cameraView.setSessionType(SessionType.VIDEO);
+                cameraView.startCapturingVideo(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/test.mp4"));
+            }
+
+            @Override
+            public void onFinish() {
+                cameraView.setSessionType(SessionType.PICTURE);
+                cameraView.stopCapturingVideo();
+            }
+
+            @Override
+            public void onCancel() {
+                cameraView.setSessionType(SessionType.PICTURE);
+                Toast.makeText(MainActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //endregion
+
         setupViewPager();
+    }
+
+    private void capture() {
+        cameraView.addCameraListener(new CameraListener() {
+            @Override
+            public void onPictureTaken(byte[] jpeg) {
+                super.onPictureTaken(jpeg);
+                if (jpeg!=null){
+                    CameraUtils.decodeBitmap(jpeg, new CameraUtils.BitmapCallback() {
+                        @Override
+                        public void onBitmapReady(Bitmap bitmap) {
+                            FileOutputStream out = null;
+                            try {
+                                out = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/test.jpg"));
+                                bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
+                            }catch (Exception e){
+                                if (out!=null)
+                                    try {
+                                        out.close();
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        cameraView.capturePicture();
     }
 
     private void setupViewPager() {
@@ -96,14 +179,15 @@ public class MainActivity extends AppBaseActivity {
             @Override
             public void onAnimationStart(Animator animator) {
                 v.setVisibility(View.VISIBLE);
-                getSupportActionBar().hide();
                 cameraView.start();
                 hideStatusBar();
+
+                //translateButton(camera,false);
             }
 
             @Override
             public void onAnimationEnd(Animator animator) {
-
+                isExpand = true;
             }
 
             @Override
@@ -116,6 +200,7 @@ public class MainActivity extends AppBaseActivity {
 
             }
         });
+
         animator.start();
 
     }
@@ -144,6 +229,7 @@ public class MainActivity extends AppBaseActivity {
                 v.setVisibility(View.GONE);
                 showStatusBar();
                 cameraView.stop();
+                isExpand = false;
             }
 
             @Override
@@ -192,7 +278,7 @@ public class MainActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        collapse(cameraContent,cameraButton);
+        collapse(cameraContent,fabCamera);
         //super.onBackPressed();
     }
 

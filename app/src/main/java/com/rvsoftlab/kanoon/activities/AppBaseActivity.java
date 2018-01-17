@@ -8,8 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rvsoftlab.kanoon.R;
 
 /**
  * Created by RVishwakarma on 1/12/2018.
@@ -80,5 +83,11 @@ public abstract class AppBaseActivity extends AppCompatActivity {
         view.animate().translationY(-y)
                 .alpha(alpha)
                 .setDuration(ANIMATION_TRANSLATION_DURATION);
+    }
+
+    public void translateButton(View view, boolean revers){
+        Animation animation = AnimationUtils.loadAnimation(mActivity, R.anim.translate_scale);
+        animation.setDuration(ANIMATION_TRANSLATION_DURATION);
+        view.startAnimation(animation);
     }
 }

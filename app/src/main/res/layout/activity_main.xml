@@ -52,15 +52,28 @@
         app:backgroundTint="@color/colorForeground"
         app:borderWidth="0dp"
         app:elevation="9dp"
-        android:layout_gravity="bottom|center"/>-->
-    <com.dewarder.camerabutton.CameraButton
+        android:layout_gravity="bottom|center"
+        android:visibility="gone"/>-->
+    <ImageButton
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_camera"
+        android:scaleType="centerCrop"
+        android:background="@android:color/transparent"
+        android:id="@+id/fab_camera"/>
+    <!--<com.dewarder.camerabutton.CameraButton
         android:id="@+id/fab_button"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="24dp"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        app:cb_main_circle_color="@color/colorAccent"
+        app:cb_stroke_color="@color/colorForeground"/>-->
+
     <include layout="@layout/content_main" />
 
 </io.codetail.widget.RevealFrameLayout>
