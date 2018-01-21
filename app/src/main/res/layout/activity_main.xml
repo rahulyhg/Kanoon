@@ -29,7 +29,7 @@
             app:itemBackground="@color/colorPrimary"
             app:itemTextColor="@android:color/black"
             app:menu="@menu/menu_bottom"/>-->
-        <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+        <!--<com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:itemBackground="@color/colorPrimary"
@@ -37,7 +37,50 @@
             app:menu="@menu/menu_bottom"
             app:elevation="2dp"
             android:id="@+id/bottom_navigation"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"/>-->
+        <net.soulwolf.widget.materialradio.MaterialRadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/bottom_navigation"
+            android:orientation="horizontal">
+            <net.soulwolf.widget.materialradio.MaterialRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:mcTextColor="@color/colorAccent"
+                app:mcButton="@drawable/dr_home"
+                app:mcAnimator="true"
+                android:layout_weight="1"/>
+            <net.soulwolf.widget.materialradio.MaterialRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:mcTextColor="@color/colorAccent"
+                app:mcButton="@drawable/dr_news"
+                app:mcAnimator="true"
+                android:layout_weight="1"/>
+            <net.soulwolf.widget.materialradio.MaterialRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:mcTextColor="@color/colorAccent"
+                app:mcButton="@drawable/dr_robot"
+                app:mcAnimator="true"
+                android:layout_weight="1"/>
+            <net.soulwolf.widget.materialradio.MaterialRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:mcTextColor="@color/colorAccent"
+                app:mcButton="@drawable/dr_robot"
+                app:mcAnimator="true"
+                android:layout_weight="1"/>
+            <net.soulwolf.widget.materialradio.MaterialRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:mcTextColor="@color/colorAccent"
+                app:mcButton="@drawable/dr_robot"
+                app:mcAnimator="true"
+                android:layout_weight="1"/>
+        </net.soulwolf.widget.materialradio.MaterialRadioGroup>
+
 
     </RelativeLayout>
     <!--<android.support.design.widget.FloatingActionButton
@@ -63,16 +106,6 @@
         android:scaleType="centerCrop"
         android:background="@android:color/transparent"
         android:id="@+id/fab_camera"/>
-    <!--<com.dewarder.camerabutton.CameraButton
-        android:id="@+id/fab_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="24dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        app:cb_main_circle_color="@color/colorAccent"
-        app:cb_stroke_color="@color/colorForeground"/>-->
 
     <include layout="@layout/content_main" />
 

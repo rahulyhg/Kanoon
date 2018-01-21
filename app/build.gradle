@@ -50,5 +50,8 @@ dependencies {
     //Camera View
     compile 'com.otaliastudios:cameraview:1.4.1'
     implementation project(':camerabutton')
+    //Radio Group
+    compile 'net.soulwolf.widget:materialRadio:1.0.1'
+    implementation project(':materialradiobutton')
 }
 apply plugin: 'com.google.gms.google-services'

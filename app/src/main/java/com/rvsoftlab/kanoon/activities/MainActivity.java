@@ -43,7 +43,7 @@ import java.io.IOException;
 import io.codetail.animation.ViewAnimationUtils;
 
 public class MainActivity extends AppBaseActivity {
-    private BottomNavigationViewEx navigationView;
+    //private BottomNavigationViewEx navigationView;
     //private FloatingActionButton fabCamera;
     private CameraButton cameraButton;
     private CameraView cameraView;
@@ -59,12 +59,12 @@ public class MainActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //region BOTTOM NAVIGATION
-        navigationView = findViewById(R.id.bottom_navigation);
+        /*navigationView = findViewById(R.id.bottom_navigation);
         navigationView.enableAnimation(true);
         navigationView.enableItemShiftingMode(false);
         navigationView.enableShiftingMode(false);
         navigationView.setTextVisibility(false);
-        navigationView.setItemIconTintList(null);
+        navigationView.setItemIconTintList(null);*/
         //endregion
 
         //region CAMERA BUTTON
