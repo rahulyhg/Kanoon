@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Kanoon.iml" filepath="$PROJECT_DIR$/Kanoon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Kanoon.iml" filepath="$PROJECT_DIR$/.idea/Kanoon.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/camerabutton/camerabutton.iml" filepath="$PROJECT_DIR$/camerabutton/camerabutton.iml" />
       <module fileurl="file://$PROJECT_DIR$/materialradiobutton/materialradiobutton.iml" filepath="$PROJECT_DIR$/materialradiobutton/materialradiobutton.iml" />

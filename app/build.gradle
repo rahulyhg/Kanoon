@@ -41,7 +41,7 @@ dependencies {
     //endregion
     //compile 'com.github.stfalcon:smsverifycatcher:0.3.1'
     // Bottom navigation
-    compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+    //compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     // Circular Reveal
     compile('com.github.ozodrukh.CircularReveal:circualreveal:2.1.0') {
         transitive = true
@@ -50,8 +50,9 @@ dependencies {
     //Camera View
     compile 'com.otaliastudios:cameraview:1.4.1'
     implementation project(':camerabutton')
-    //Radio Group
-    compile 'net.soulwolf.widget:materialRadio:1.0.1'
+    // Circular Image View
+    compile 'de.hdodenhof:circleimageview:2.2.0'
+
     implementation project(':materialradiobutton')
 }
 apply plugin: 'com.google.gms.google-services'

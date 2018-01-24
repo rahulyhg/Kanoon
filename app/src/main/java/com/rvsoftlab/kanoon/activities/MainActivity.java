@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.dewarder.camerabutton.CameraButton;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraUtils;
 import com.otaliastudios.cameraview.CameraView;
@@ -59,12 +58,7 @@ public class MainActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //region BOTTOM NAVIGATION
-        /*navigationView = findViewById(R.id.bottom_navigation);
-        navigationView.enableAnimation(true);
-        navigationView.enableItemShiftingMode(false);
-        navigationView.enableShiftingMode(false);
-        navigationView.setTextVisibility(false);
-        navigationView.setItemIconTintList(null);*/
+
         //endregion
 
         //region CAMERA BUTTON
