@@ -1,5 +1,6 @@
 package com.rvsoftlab.kanoon.activities;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
@@ -37,6 +38,7 @@ import com.rvsoftlab.kanoon.R;
 import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
 import com.rvsoftlab.kanoon.helper.Constants;
 import com.rvsoftlab.kanoon.helper.Helper;
+import com.rvsoftlab.kanoon.helper.PermissionUtil;
 import com.rvsoftlab.kanoon.view.KiewPager;
 import com.stfalcon.smsverifycatcher.OnSmsCatchListener;
 import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
@@ -70,7 +72,7 @@ public class LoginActivity extends AppBaseActivity {
     private Activity mActivity;
     private String userMobile;
     private String userName;
-
+    private PermissionUtil permission;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +80,7 @@ public class LoginActivity extends AppBaseActivity {
         if (getSupportActionBar()!=null){
             getSupportActionBar().setTitle("");
         }
-
+        permission = new PermissionUtil(this);
         btnLogin = findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +88,17 @@ public class LoginActivity extends AppBaseActivity {
                 switch (viewPager.getCurrentItem()){
                     case 0:
                         if (isSteponeOk()){
-                            registerLoginUser(editMobile.getText().toString());
+                            permission.checkAndAskPermission(Manifest.permission.READ_SMS, 102, new PermissionUtil.PermissionAskListener() {
+                                @Override
+                                public void onPermissionGranted() {
+                                    registerLoginUser(editMobile.getText().toString());
+                                }
+
+                                @Override
+                                public void onPermissionDenied() {
+
+                                }
+                            });
                         }
                         break;
                     case 1:
@@ -366,6 +378,7 @@ public class LoginActivity extends AppBaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         smsVerifyCatcher.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        permission.onRequestPermissionsResult(requestCode,permissions,grantResults);
     }
 
     //region LIFECYCLE

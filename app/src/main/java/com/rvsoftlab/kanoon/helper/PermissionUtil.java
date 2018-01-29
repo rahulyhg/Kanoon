@@ -58,6 +58,7 @@ public class PermissionUtil {
                  * Just Request Normal Permission
                  */
                 ActivityCompat.requestPermissions(mActivity,new String[]{permission},requestCode);
+                session.putPermissionStatus(permission,true);
             }
         }else {
             this.permissionListener.onPermissionGranted();
@@ -76,8 +77,6 @@ public class PermissionUtil {
             }else {
                 permissionListener.onPermissionDenied();
             }
-        }else {
-            mActivity.onRequestPermissionsResult(requestCode,permissions,grantResults);
         }
     }
 
