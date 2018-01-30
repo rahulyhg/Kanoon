@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -88,7 +89,7 @@ public class LoginActivity extends AppBaseActivity {
                 switch (viewPager.getCurrentItem()){
                     case 0:
                         if (isSteponeOk()){
-                            permission.checkAndAskPermission(Manifest.permission.READ_SMS, 102, new PermissionUtil.PermissionAskListener() {
+                            permission.checkAndAskPermission(Manifest.permission.READ_SMS, Constants.PERMISSION.SMS, new PermissionUtil.PermissionAskListener() {
                                 @Override
                                 public void onPermissionGranted() {
                                     registerLoginUser(editMobile.getText().toString());
@@ -246,6 +247,8 @@ public class LoginActivity extends AppBaseActivity {
                     return param;
                 }
             };
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(30000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            stringRequest.setShouldCache(true);
             requestQueue.add(stringRequest);
         }else {
             Toast.makeText(mActivity, "Please check your network", Toast.LENGTH_SHORT).show();

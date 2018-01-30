@@ -7,10 +7,12 @@ package com.rvsoftlab.kanoon.helper;
 public class Constants {
     public static final String SMS_SENDER = "KNAPPS";
 
-    public static final int PERMISSION_SMS = 100;
-    public static final int PERMISSION_CAMERA = 101;
-    public static final int PERMISSION_STORAGE = 102;
-
+    public interface PERMISSION{
+        int SMS = 100;
+        int CAMERA = 101;
+        int RECORD = 102;
+        int STORAGE = 103;
+    }
 
     // API URL
     public static final String API = "http://rvsoft.esy.es/Android/kanoon/index.php";

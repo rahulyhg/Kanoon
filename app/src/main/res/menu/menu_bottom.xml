@@ -5,7 +5,7 @@
         android:id="@+id/bottom_home"
         android:icon="@drawable/dr_home"
         android:title="Home"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/bottom_news"
         android:icon="@drawable/dr_news"
@@ -19,8 +19,9 @@
         android:icon="@drawable/dr_robot"
         android:title="AI"
         app:showAsAction="ifRoom"/>
-    <item android:id="@+id/bottom_user"
+    <item
+        android:id="@+id/bottom_user"
+        android:icon="@drawable/dr_robot"
         android:title="User"
-        app:showAsAction="always"
-        android:actionLayout="@layout/layout_menu_next"/>
+        app:showAsAction="ifRoom"/>
 </menu>

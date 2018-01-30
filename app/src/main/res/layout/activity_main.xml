@@ -4,90 +4,153 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rvsoftlab.kanoon.activities.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.rvsoftlab.kanoon.activities.MainActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.v7.widget.Toolbar
+
+        <!--<android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbar"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true" />-->
+
         <com.rvsoftlab.kanoon.view.KiewPager
+            android:id="@+id/main_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/bottom_navigation"
-            android:layout_below="@id/toolbar">
+            android:layout_above="@id/bottom_navigation"/>
 
-        </com.rvsoftlab.kanoon.view.KiewPager>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
+        <!--<LinearLayout
             android:id="@+id/bottom_navigation"
-            android:orientation="horizontal">
-            <net.soulwolf.widget.materialradio.MaterialRadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
                 <net.soulwolf.widget.materialradio.MaterialRadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/bottom_home"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:mcTextColor="@color/colorAccent"
                     app:mcButton="@drawable/dr_home"
                     app:mcAnimator="true"
-                    android:layout_weight="1"/>
+                    app:mcChecked="true"/>
+
+                &lt;!&ndash;<ImageButton
+                    android:id="@+id/bottom_home"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/dr_home"
+                    app:layout_constraintStart_toStartOf="parent"/>&ndash;&gt;
+
+                &lt;!&ndash;<ImageButton
+                    android:id="@+id/bottom_news"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/dr_news"
+                    app:layout_constraintEnd_toStartOf="@+id/bottom_blank"
+                    app:layout_constraintStart_toEndOf="@+id/bottom_home" />&ndash;&gt;
+
                 <net.soulwolf.widget.materialradio.MaterialRadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:mcTextColor="@color/colorAccent"
+                    android:id="@+id/bottom_news"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintEnd_toStartOf="@+id/bottom_blank"
+                    app:layout_constraintStart_toEndOf="@+id/bottom_home"
                     app:mcButton="@drawable/dr_news"
-                    app:mcAnimator="true"
-                    android:layout_weight="1"/>
-                <net.soulwolf.widget.materialradio.MaterialRadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
                     app:mcTextColor="@color/colorAccent"
-                    app:mcButton="@drawable/dr_robot"
-                    app:mcAnimator="true"
-                    android:layout_weight="1"
-                    android:visibility="invisible"/>
-                <net.soulwolf.widget.materialradio.MaterialRadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:mcTextColor="@color/colorAccent"
-                    app:mcButton="@drawable/dr_robot"
-                    app:mcAnimator="true"
-                    android:layout_weight="1"/>
+                    app:mcAnimator="true"/>
 
-            </net.soulwolf.widget.materialradio.MaterialRadioGroup>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="4">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_home_color"
-                    app:civ_border_color="@color/colorBlack"
-                    app:civ_border_width="1dp"/>
-            </LinearLayout>
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/bottom_ai"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/dr_robot"
+                    app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
+                    app:layout_constraintStart_toEndOf="@+id/bottom_blank" />
 
+                &lt;!&ndash;<android.support.design.widget.FloatingActionButton
+                    android:id="@+id/floatingActionButton"
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginEnd="8dp"
+                    app:backgroundTint="@color/colorWhite"
+                    app:fabSize="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:src="@drawable/user"
+                    android:scaleType="fitCenter"/>&ndash;&gt;
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:id="@+id/floatingActionButton"
+                    app:cardElevation="5dp"
+                    app:cardCornerRadius="20dp">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/user"
+                        app:civ_border_width="1dp"/>
+                </android.support.v7.widget.CardView>
+
+                <ImageButton
+                    android:id="@+id/bottom_blank"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>-->
+        <android.support.design.widget.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/bottom_navigation"
+            app:menu="@menu/menu_bottom"
+            app:itemIconTint="@android:color/transparent"/>
 
     </RelativeLayout>
+
     <ImageButton
+        android:id="@+id/fab_camera"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_camera"
-        android:scaleType="centerCrop"
         android:background="@android:color/transparent"
-        android:id="@+id/fab_camera"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_camera" />
 
     <include layout="@layout/content_main" />
 

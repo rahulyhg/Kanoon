@@ -4,17 +4,21 @@ import android.Manifest;
 import android.animation.Animator;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.view.animation.PathInterpolatorCompat;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,8 +35,12 @@ import com.otaliastudios.cameraview.CameraUtils;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.SessionType;
 import com.rvsoftlab.kanoon.R;
+import com.rvsoftlab.kanoon.adapters.ViewPagerFragmentAdapter;
 import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
+import com.rvsoftlab.kanoon.fragments.HomeFragment;
+import com.rvsoftlab.kanoon.helper.BottomNavigationViewHelper;
 import com.rvsoftlab.kanoon.helper.Constants;
+import com.rvsoftlab.kanoon.helper.Helper;
 import com.rvsoftlab.kanoon.helper.PermissionUtil;
 
 import java.io.File;
@@ -43,12 +51,11 @@ import java.util.UUID;
 import io.codetail.animation.ViewAnimationUtils;
 
 public class MainActivity extends AppBaseActivity {
-    //private BottomNavigationViewEx navigationView;
-    //private FloatingActionButton fabCamera;
+
     private CameraButton cameraButton;
     private CameraView cameraView;
     private View cameraContent;
-    //private KiewPager kiewPager;
+
     private ImageButton fabCamera;
     private ImageButton gallerySwitch;
     private ImageButton cameraSwitch;
@@ -60,10 +67,18 @@ public class MainActivity extends AppBaseActivity {
     private ImageView imagePreview;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private BottomNavigationView bottomNavigationView;
+    private ViewPager kiewPager;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
+
         //region VARIABLE
         permission = new PermissionUtil(mActivity);
         cameraHolder = findViewById(R.id.camera_holder);
@@ -71,12 +86,16 @@ public class MainActivity extends AppBaseActivity {
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setItemIconTintList(null);
+        bottomNavigationView.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
         //endregion
 
         //region CAMERA BUTTON
         cameraButton = findViewById(R.id.camera_button);
         cameraView = findViewById(R.id.camera_preview);
-        //kiewPager = findViewById(R.id.camera_viewpager);
+        kiewPager = findViewById(R.id.main_view_pager);
         cameraContent = findViewById(R.id.camera_content);
         fabCamera = findViewById(R.id.fab_camera);
         gallerySwitch = findViewById(R.id.gallery_switch);
@@ -94,7 +113,7 @@ public class MainActivity extends AppBaseActivity {
         cameraButton.setOnTapEventListener(new CameraButton.OnTapEventListener() {
             @Override
             public void onTap() {
-                permission.checkAndAskPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Constants.PERMISSION_STORAGE, new PermissionUtil.PermissionAskListener() {
+                permission.checkAndAskPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Constants.PERMISSION.STORAGE, new PermissionUtil.PermissionAskListener() {
                     @Override
                     public void onPermissionGranted() {
                         capture();
@@ -154,10 +173,6 @@ public class MainActivity extends AppBaseActivity {
                         public void onBitmapReady(Bitmap bitmap) {
                             FileOutputStream out = null;
                             try {
-                                /*imagePreview.setImageBitmap(bitmap);
-                                cameraView.stop();*/
-                                /*out = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/test.jpg"));
-                                bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);*/
                                 processData(bitmap);
                             }catch (Exception e){
                                 if (out!=null)
@@ -184,22 +199,27 @@ public class MainActivity extends AppBaseActivity {
             dialog.show();
 
             FileOutputStream out = null;
-            out = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/test.jpg"));
+            out = new FileOutputStream(new File(Helper.getDataDirectory(mActivity)+"/test.jpg"));
             bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
 
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/test.jpg");
+            final File file = new File(Helper.getDataDirectory(mActivity)+"/test.jpg");
             StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
             ref.putFile(Uri.fromFile(file))
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Toast.makeText(mActivity, "Success", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            Log.d(TAG,taskSnapshot.getDownloadUrl().toString());
+                            imagePreview.setImageBitmap(null);
+                            file.delete();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(mActivity, "Fail", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -216,9 +236,10 @@ public class MainActivity extends AppBaseActivity {
     }
 
     private void setupViewPager() {
-        ViewPagerItemAdapter adapter = new ViewPagerItemAdapter(this);
-        adapter.addView(R.id.camera_holder,"Camera");
-        //kiewPager.setAdapter(adapter);
+        ViewPagerFragmentAdapter adapter = new ViewPagerFragmentAdapter(getSupportFragmentManager());
+        adapter.addFragment(new HomeFragment(),"Home");
+        kiewPager.setAdapter(adapter);
+
     }
 
     public void expand(final View v, final View camera) {
@@ -305,23 +326,7 @@ public class MainActivity extends AppBaseActivity {
         });
     }
 
-    public void changeContentVisibility(){
-        int translateTransition;
-        Interpolator interpolator = PathInterpolatorCompat.create(0.790f,-0.130f,0.205f,1.160f);
-        if (!isOpned){
-            translateTransition = cameraHolder.getHeight() - 500;
-            isOpned = true;
-        }else {
-            translateTransition = 0;
-            isOpned =false;
-        }
-        cameraHolder.animate().cancel();
-        cameraHolder.animate()
-                .translationY(translateTransition)
-                .setInterpolator(interpolator)
-                .setDuration(500)
-                .start();
-    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

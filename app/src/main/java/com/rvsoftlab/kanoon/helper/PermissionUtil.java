@@ -2,13 +2,16 @@ package com.rvsoftlab.kanoon.helper;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
 
 /**
  * Created by RVishwakarma on 1/17/2018.
@@ -49,10 +52,24 @@ public class PermissionUtil {
                  * Previously Permission Request was canceled with 'Don't ask again'
                  * Redirect to setting after showing Information about why permission needed
                  */
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", mActivity.getPackageName(), null);
-                intent.setData(uri);
-                mActivity.startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                new AlertDialog.Builder(mActivity)
+                        .setTitle("Permission Needed!")
+                        .setMessage("Permission needed to perform this action, Please go to Setting and enable permission")
+                        .setPositiveButton("GO TO SETTING", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", mActivity.getPackageName(), null);
+                                intent.setData(uri);
+                                mActivity.startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).show();
             }else {
                 /**
                  * Just Request Normal Permission

@@ -5,10 +5,11 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.util.Log;
+import android.os.Environment;
 
-import com.android.volley.NoConnectionError;
 import com.android.volley.VolleyError;
+
+import java.io.File;
 
 /**
  * Created by ravik on 14-01-2018.
@@ -55,5 +56,13 @@ public class Helper {
 
     public static void requestErrorHandling(Context context, VolleyError error){
         error.printStackTrace();
+    }
+
+    public static File getDownloadDirectory(){
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    }
+
+    public static String getDataDirectory(Context context){
+        return Environment.getDataDirectory()+"/data/"+context.getPackageName()+"/files/";
     }
 }
