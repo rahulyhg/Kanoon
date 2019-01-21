@@ -12,4 +12,5 @@
     <color name="colorGray">#ccc</color>
     <color name="colorRed">#EE1149</color>
     <color name="colorGreen">#25AE88</color>
+    <color name="black_alpha_40">#66000000</color>
 </resources>

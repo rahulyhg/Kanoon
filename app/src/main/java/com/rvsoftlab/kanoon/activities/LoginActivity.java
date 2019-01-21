@@ -3,6 +3,7 @@ package com.rvsoftlab.kanoon.activities;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -315,8 +316,6 @@ public class LoginActivity extends AppBaseActivity {
         });
     }
 
-
-
     private void signInWithFirebase(String token) {
         mAuth.signInWithCustomToken(token).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -399,7 +398,7 @@ public class LoginActivity extends AppBaseActivity {
         if (user!=null){
             //Toast.makeText(mActivity, user.getUid(), Toast.LENGTH_SHORT).show();
 
-            startActivity(new Intent(mActivity,MainActivity.class));
+            startActivity(new Intent(mActivity,MainPageActivity.class));
             finish();
 
         }

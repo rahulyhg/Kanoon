@@ -210,7 +210,7 @@ public class MainActivity extends AppBaseActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Toast.makeText(mActivity, "Success", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
-                            Log.d(TAG,taskSnapshot.getDownloadUrl().toString());
+                            Log.d(TAG,taskSnapshot.getStorage().getDownloadUrl().toString());
                             imagePreview.setImageBitmap(null);
                             file.delete();
                         }

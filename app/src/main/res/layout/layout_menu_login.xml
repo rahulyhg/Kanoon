@@ -5,14 +5,6 @@
     android:layout_height="match_parent"
     android:background="?attr/selectableItemBackgroundBorderless"
     android:orientation="horizontal">
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Join"
-        android:layout_margin="12dp"
-        android:fontFamily="@font/nexa_bold"
-        android:textColor="@color/colorBlack"
-        android:textSize="17sp"/>-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
