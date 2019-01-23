@@ -56,7 +56,7 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     public void translateToRight(View view, boolean show) {
         float x = show ? 0f : view.getWidth();
         float alpha = show ? 1f : 0f;
-        view.animate().translationX(-x)
+        view.animate().translationX(x)
                 .alpha(alpha)
                 .setDuration(ANIMATION_TRANSLATION_DURATION);
     }
@@ -64,7 +64,7 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     public void translateToLeft(View view, boolean show) {
         float x = show ? 0f : view.getWidth();
         float alpha = show ? 1f : 0f;
-        view.animate().translationX(x)
+        view.animate().translationX(-x)
                 .alpha(alpha)
                 .setDuration(ANIMATION_TRANSLATION_DURATION);
     }

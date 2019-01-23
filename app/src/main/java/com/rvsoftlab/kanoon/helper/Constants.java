@@ -14,6 +14,21 @@ public class Constants {
         int STORAGE = 103;
     }
 
+    public interface POST_TYPE{
+        int TEXT = 0;
+        int IMAGE = 1;
+    }
+
+    public interface DATE_TIME_FORMAT {
+        String dateFormat = "yyyy-MM-dd";
+        String timeFormat = "HH:mm";
+    }
+
+    public interface FIRESTORE_NODES{
+        String USERS = "user";
+        String POSTS = "posts";
+    }
+
     // API URL
     public static final String API = "http://rvsoft.esy.es/Android/kanoon/index.php";
 }

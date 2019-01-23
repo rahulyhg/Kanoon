@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,11 +37,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.rvsoftlab.kanoon.R;
 import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
 import com.rvsoftlab.kanoon.helper.Constants;
 import com.rvsoftlab.kanoon.helper.Helper;
 import com.rvsoftlab.kanoon.helper.PermissionUtil;
+import com.rvsoftlab.kanoon.models.User;
 import com.rvsoftlab.kanoon.view.KiewPager;
 import com.stfalcon.smsverifycatcher.OnSmsCatchListener;
 import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
@@ -321,14 +325,21 @@ public class LoginActivity extends AppBaseActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    user = task.getResult().getUser();
-                    DocumentReference ref = fireDb.collection("users").document(user.getUid());
-                    Map<String,String> userData = new HashMap<>();
-                    userData.put("name",userName);
-                    userData.put("mobile",userMobile);
-                    ref.set(userData);
-                    startActivity(new Intent(mActivity,MainActivity.class));
-                    finish();
+                    //user = task.getResult().getUser();
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                            DocumentReference ref = fireDb.collection(Constants.FIRESTORE_NODES.USERS).document(userMobile);
+                            User user = new User();
+                            user.setName(userName);
+                            user.setMobile(userMobile);
+                            user.setFirebaseToken(instanceIdResult.getToken());
+                            user.setCreatedAt(Helper.currentDate());
+                            ref.set(user);
+                            startActivity(new Intent(mActivity,MainActivity.class));
+                            finish();
+                        }
+                    });
                 }else {
                     task.getException().printStackTrace();
                 }

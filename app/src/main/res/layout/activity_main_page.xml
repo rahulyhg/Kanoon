@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:orientation="vertical"
-            />
+            android:id="@+id/postList"/>
     </com.yarolegovich.mp.MaterialPreferenceScreen>
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

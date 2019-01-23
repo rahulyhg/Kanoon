@@ -1,5 +1,6 @@
 package com.rvsoftlab.kanoon.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
@@ -16,12 +17,16 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by ravik on 14-01-2018.
@@ -214,6 +219,30 @@ public class Helper {
      */
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String currentDate() {
+        Calendar now = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat(Constants.DATE_TIME_FORMAT.dateFormat);
+        return dateFormat.format(now.getTime());
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String currentTime() {
+        Calendar now = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat(Constants.DATE_TIME_FORMAT.timeFormat);
+        return dateFormat.format(now.getTime());
+    }
+
+    /**
+     * Check if Variable/String Empty or Null
+     *
+     * @param s
+     * @return true or false
+     */
+    public static boolean isNullOrEmpty(String s) {
+        return s == null || s.contains("null") || s.equalsIgnoreCase("") || TextUtils.isEmpty(s) || s.equalsIgnoreCase(" ") || TextUtils.isEmpty(s);
     }
 
 }
