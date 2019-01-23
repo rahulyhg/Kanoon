@@ -1,10 +1,14 @@
 package com.rvsoftlab.kanoon.models;
 
+import com.google.firebase.Timestamp;
+
+import io.realm.RealmObject;
+
 /**
  * Created by RVishwakarma on 12/26/2017.
  */
 
-public class User {
+public class User extends RealmObject {
     private String name;
     private String mobile;
     private String image = "";
@@ -35,19 +39,19 @@ public class User {
         this.image = image;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public String getFirebaseToken() {
         return firebaseToken;
     }
 
     public void setFirebaseToken(String firebaseToken) {
         this.firebaseToken = firebaseToken;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

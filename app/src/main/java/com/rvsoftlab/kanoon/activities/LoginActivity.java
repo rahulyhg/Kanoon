@@ -44,6 +44,7 @@ import com.rvsoftlab.kanoon.adapters.ViewPagerItemAdapter;
 import com.rvsoftlab.kanoon.helper.Constants;
 import com.rvsoftlab.kanoon.helper.Helper;
 import com.rvsoftlab.kanoon.helper.PermissionUtil;
+import com.rvsoftlab.kanoon.helper.RealmHelper;
 import com.rvsoftlab.kanoon.models.User;
 import com.rvsoftlab.kanoon.view.KiewPager;
 import com.stfalcon.smsverifycatcher.OnSmsCatchListener;
@@ -336,6 +337,7 @@ public class LoginActivity extends AppBaseActivity {
                             user.setFirebaseToken(instanceIdResult.getToken());
                             user.setCreatedAt(Helper.currentDate());
                             ref.set(user);
+                            RealmHelper.Companion.with(mActivity).saveUser(user);
                             startActivity(new Intent(mActivity,MainActivity.class));
                             finish();
                         }

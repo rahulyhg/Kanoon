@@ -19,7 +19,7 @@
             app:cameraGestureTap="focusWithMarker"
             app:cameraGestureLongTap="none"
             app:cameraGesturePinch="zoom"
-            app:cameraJpegQuality="80"
+            app:cameraJpegQuality="100"
             app:cameraVideoQuality="max480p"
             app:cameraSessionType="picture"
             android:id="@+id/camera_preview"/>

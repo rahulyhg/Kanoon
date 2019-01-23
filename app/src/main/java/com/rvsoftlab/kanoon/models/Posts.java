@@ -1,7 +1,11 @@
 package com.rvsoftlab.kanoon.models;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.ServerTimestamp;
 import com.rvsoftlab.kanoon.helper.Constants;
 import com.rvsoftlab.kanoon.helper.Helper;
+
+import java.util.Date;
 
 public class Posts {
     private int PostType = Constants.POST_TYPE.TEXT;
@@ -10,9 +14,11 @@ public class Posts {
     private int PostLikeCount = 0;
     private int PostCommentCount = 0;
     private String userImage = "";
-    private String AddedDateTime = Helper.currentDate()+" "+Helper.currentTime();
+    @ServerTimestamp
+    private Date AddedDateTime = new Date();
     private boolean isAnonymous = true;
     private String uuid;
+    private String addedBy;
 
     public int getPostType() {
         return PostType;
@@ -54,11 +60,19 @@ public class Posts {
         PostCommentCount = postCommentCount;
     }
 
-    public String getAddedDateTime() {
+    /*public String getAddedDateTime() {
         return AddedDateTime;
     }
 
     public void setAddedDateTime(String addedDateTime) {
+        AddedDateTime = addedDateTime;
+    }*/
+
+    public Date getAddedDateTime() {
+        return AddedDateTime;
+    }
+
+    public void setAddedDateTime(Date addedDateTime) {
         AddedDateTime = addedDateTime;
     }
 
@@ -84,5 +98,13 @@ public class Posts {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getAddedBy() {
+        return addedBy;
+    }
+
+    public void setAddedBy(String addedBy) {
+        this.addedBy = addedBy;
     }
 }

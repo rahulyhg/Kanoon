@@ -17,6 +17,7 @@ public class Constants {
     public interface POST_TYPE{
         int TEXT = 0;
         int IMAGE = 1;
+        int VIDEO = 2;
     }
 
     public interface DATE_TIME_FORMAT {
@@ -25,7 +26,7 @@ public class Constants {
     }
 
     public interface FIRESTORE_NODES{
-        String USERS = "user";
+        String USERS = "users";
         String POSTS = "posts";
     }
 

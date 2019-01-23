@@ -2,12 +2,14 @@ package com.rvsoftlab.kanoon.models;
 
 import android.support.annotation.Nullable;
 
+import com.otaliastudios.cameraview.Size;
+
 import java.io.File;
 
 public class ResultHolder {
     private static byte[] image;
     private static File video;
-    private static Size nativeCaptureSize;
+    private static com.otaliastudios.cameraview.Size nativeCaptureSize;
     private static long timeToCallback;
 
     public static void setImage(@Nullable byte[] image) {
@@ -28,13 +30,12 @@ public class ResultHolder {
         return video;
     }
 
-    public static void setNativeCaptureSize(@Nullable Size nativeCaptureSize) {
-        ResultHolder.nativeCaptureSize = nativeCaptureSize;
-    }
-
-    @Nullable
     public static Size getNativeCaptureSize() {
         return nativeCaptureSize;
+    }
+
+    public static void setNativeCaptureSize(Size nativeCaptureSize) {
+        ResultHolder.nativeCaptureSize = nativeCaptureSize;
     }
 
     public static void setTimeToCallback(long timeToCallback) {

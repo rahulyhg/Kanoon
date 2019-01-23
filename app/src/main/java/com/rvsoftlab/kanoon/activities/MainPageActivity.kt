@@ -1,31 +1,39 @@
 package com.rvsoftlab.kanoon.activities
 
+import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.view.animation.PathInterpolatorCompat
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
+import android.widget.Toast
 import com.dewarder.camerabutton.CameraButton
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.otaliastudios.cameraview.CameraListener
 import com.rvsoftlab.kanoon.R
 import com.rvsoftlab.kanoon.adapters.PostAdapter
 import com.rvsoftlab.kanoon.helper.Constants
+import com.rvsoftlab.kanoon.helper.PermissionUtil
+import com.rvsoftlab.kanoon.helper.RealmHelper
 import com.rvsoftlab.kanoon.models.Posts
+import com.rvsoftlab.kanoon.models.ResultHolder
+import com.rvsoftlab.kanoon.models.User
 import kotlinx.android.synthetic.main.activity_main_page.*
 import kotlinx.android.synthetic.main.content_main_page.*
+import java.util.*
+
 
 class MainPageActivity : AppBaseActivity() {
     private val TAG = MainPageActivity::class.simpleName
@@ -35,8 +43,11 @@ class MainPageActivity : AppBaseActivity() {
     private var isTextMode:Boolean = false
     private var listArray:ArrayList<Posts> = ArrayList()
     private lateinit var adapter:PostAdapter
+    private lateinit var permission:PermissionUtil
 
     private val db:FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val storage:StorageReference = FirebaseStorage.getInstance().reference
+    private lateinit var user: User
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,11 +57,15 @@ class MainPageActivity : AppBaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.hide()
+        permission = PermissionUtil(this)
+
+        user = RealmHelper.with(this).getUser()
 
         camera_preview.visibility = GONE
 
         initViewListeners()
         initRecyclerView()
+        getAllPosts()
     }
 
     private fun initViewListeners() {
@@ -80,7 +95,16 @@ class MainPageActivity : AppBaseActivity() {
 
         })
         cameraCaptureButton.setOnTapEventListener {
+            permission.checkAndAskPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,Constants.PERMISSION.STORAGE,object:PermissionUtil.PermissionAskListener{
+                override fun onPermissionGranted() {
+                    captureImage()
+                }
 
+                override fun onPermissionDenied() {
+                    Toast.makeText(this@MainPageActivity,"Please Grand Access to Capture Image",Toast.LENGTH_SHORT).show()
+                }
+
+            })
         }
         cameraCaptureButton.setOnStateChangeListener {
             if (it == CameraButton.State.START_EXPANDING) {
@@ -94,26 +118,87 @@ class MainPageActivity : AppBaseActivity() {
 
     }
 
+    private fun captureImage() {
+        camera_preview.addCameraListener(object : CameraListener(){
+            override fun onPictureTaken(jpeg: ByteArray?) {
+                super.onPictureTaken(jpeg)
+                camera_preview.stop()
+                if (jpeg != null) {
+                    ResultHolder.dispose()
+                    ResultHolder.setImage(jpeg)
+                    ResultHolder.setNativeCaptureSize(camera_preview.captureSize)
+
+                    storage.child("/images/${user.mobile}/${UUID.randomUUID()}.jpg")
+                            .putBytes(jpeg)
+                            .addOnSuccessListener {
+                                camera_preview.start()
+                            }.addOnFailureListener { e->Log.w(TAG, "Error writing document", e) }
+                            .addOnProgressListener {
+                                val progress = 100.0 * it.bytesTransferred / it.totalByteCount
+                                Log.d(TAG,"$progress")
+                            }
+                }
+                //ResultHolder.setTimeToCallback(callbackTime - captureStartTime)
+
+            }
+        })
+        camera_preview.capturePicture()
+    }
+
     private fun initRecyclerView() {
         adapter = PostAdapter(this,listArray)
         postList.adapter = adapter
     }
 
+    private fun getAllPosts() {
+        db.collection(Constants.FIRESTORE_NODES.POSTS)
+                .get()
+                .addOnCompleteListener {task->
+                    if (task.isSuccessful) {
+                        val list:ArrayList<Posts> = ArrayList()
+                        for (document in task.result!!) {
+                            Log.d(TAG, document.id + " => " + document.data)
+                            val data:Posts = document.toObject(Posts::class.java)
+                            data.uuid = document.id
+                            list.add(data)
+                        }
+                        adapter.addAll(list)
+                    }
+                }
+    }
+
 
     private fun createTextPost() {
         val post = Posts()
+        post.postType = Constants.POST_TYPE.TEXT
         post.postText = postText.text.toString()
         post.postLikeCount = 0
         post.postCommentCount = 0
-        listArray.add(0,post)
-        adapter.notifyDataSetChanged()
+        post.addedBy = user.mobile
+
         postText.setText("")
         hideKeyboard()
         postToServer(post)
     }
 
     private fun postToServer(post: Posts) {
-        db.collection(Constants.FIRESTORE_NODES.POSTS)
+        /*db.collection(Constants.FIRESTORE_NODES.POSTS).document().collection(user.mobile)
+                .add(post)
+                .addOnSuccessListener { Log.d(TAG,"DocumentSnapshot successfully written!") }
+                .addOnFailureListener { e->Log.w(TAG, "Error writing document", e) }*/
+
+        db.collection(Constants.FIRESTORE_NODES.POSTS).add(post)
+                .addOnSuccessListener {
+                    listArray.add(0,post)
+                    adapter.notifyDataSetChanged()
+                }
+                .addOnFailureListener { e->Log.w(TAG, "Error writing document", e) }
+
+        /*db.collection(Constants.FIRESTORE_NODES.POSTS).document(user.mobile)
+                .set(post)
+                .addOnSuccessListener {
+                    Log.d(TAG,"DocumentSnapshot successfully written!")
+                }.addOnFailureListener { e->Log.w(TAG, "Error writing document", e) }*/
     }
 
     private fun changeContentVisibility() {

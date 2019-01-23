@@ -62,7 +62,7 @@ class PostAdapter(private val context: Context, private val mList: ArrayList<Pos
         val vh = holder as TextViewHolder
         vh.postUserName.text = "Anonymous"
         vh.postCaption.text = mList[position].postText
-        vh.postTime.text = mList[position].addedDateTime
+        //vh.postTime.text = mList[position].addedDateTime
         if (mList[position].isAnonymous) {
             vh.postUserImage.setImageDrawable(context.getDrawable(R.mipmap.ic_incognito))
         }else if (Helper.isNullOrEmpty(mList[position].userImage)){
