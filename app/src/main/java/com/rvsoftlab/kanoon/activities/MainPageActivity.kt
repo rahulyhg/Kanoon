@@ -4,6 +4,8 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.view.animation.PathInterpolatorCompat
 import android.text.Editable
@@ -27,9 +29,11 @@ import com.rvsoftlab.kanoon.adapters.PostAdapter
 import com.rvsoftlab.kanoon.helper.Constants
 import com.rvsoftlab.kanoon.helper.PermissionUtil
 import com.rvsoftlab.kanoon.helper.RealmHelper
+import com.rvsoftlab.kanoon.helper.convertToByteArray
 import com.rvsoftlab.kanoon.models.Posts
 import com.rvsoftlab.kanoon.models.ResultHolder
 import com.rvsoftlab.kanoon.models.User
+import com.zxy.tiny.Tiny
 import kotlinx.android.synthetic.main.activity_main_page.*
 import kotlinx.android.synthetic.main.content_main_page.*
 import java.util.*
@@ -124,19 +128,29 @@ class MainPageActivity : AppBaseActivity() {
                 super.onPictureTaken(jpeg)
                 camera_preview.stop()
                 if (jpeg != null) {
-                    ResultHolder.dispose()
-                    ResultHolder.setImage(jpeg)
-                    ResultHolder.setNativeCaptureSize(camera_preview.captureSize)
+                    var option = Tiny.BatchFileCompressOptions()
+                    option.config =  Bitmap.Config.ARGB_8888
+                    Tiny.getInstance().source(jpeg).asBitmap().withOptions(option).compress { isSuccess, bitmap, t ->
+                        if (isSuccess) {
+                            var img:ByteArray = bitmap.convertToByteArray()
+                            ResultHolder.dispose()
+                            ResultHolder.setImage(img)
+                            ResultHolder.setNativeCaptureSize(camera_preview.captureSize)
 
-                    storage.child("/images/${user.mobile}/${UUID.randomUUID()}.jpg")
-                            .putBytes(jpeg)
-                            .addOnSuccessListener {
-                                camera_preview.start()
-                            }.addOnFailureListener { e->Log.w(TAG, "Error writing document", e) }
-                            .addOnProgressListener {
-                                val progress = 100.0 * it.bytesTransferred / it.totalByteCount
-                                Log.d(TAG,"$progress")
-                            }
+                            storage.child("/images/${user.mobile}/${UUID.randomUUID()}.png")
+                                    .putBytes(img)
+                                    .addOnSuccessListener {
+                                        camera_preview.start()
+                                    }.addOnFailureListener { e->Log.w(TAG, "Error writing document", e) }
+                                    .addOnProgressListener {
+                                        val progress = 100.0 * it.bytesTransferred / it.totalByteCount
+                                        Log.d(TAG,"$progress")
+                                    }
+                        }
+                    }
+
+
+
                 }
                 //ResultHolder.setTimeToCallback(callbackTime - captureStartTime)
 
@@ -280,4 +294,9 @@ class MainPageActivity : AppBaseActivity() {
         val inputManager:InputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(this.currentFocus.windowToken,HIDE_NOT_ALWAYS)
     }
+
+
+
 }
+
+

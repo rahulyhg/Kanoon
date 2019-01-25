@@ -42,6 +42,7 @@ import com.rvsoftlab.kanoon.helper.BottomNavigationViewHelper;
 import com.rvsoftlab.kanoon.helper.Constants;
 import com.rvsoftlab.kanoon.helper.Helper;
 import com.rvsoftlab.kanoon.helper.PermissionUtil;
+import com.zxy.tiny.Tiny;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -172,15 +173,11 @@ public class MainActivity extends AppBaseActivity {
                         @Override
                         public void onBitmapReady(Bitmap bitmap) {
                             FileOutputStream out = null;
+
                             try {
                                 processData(bitmap);
                             }catch (Exception e){
-                                if (out!=null)
-                                    try {
-                                        out.close();
-                                    } catch (IOException e1) {
-                                        e1.printStackTrace();
-                                    }
+                                e.printStackTrace();
                             }
                         }
                     });
