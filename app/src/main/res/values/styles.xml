@@ -13,7 +13,7 @@
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppTheme.PopupMenu</item>
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <item name="navigationIcon">@drawable/ic_home_up</item>
+        <item name="navigationIcon">@drawable/ic_home_up_black</item>
     </style>
 
     <style name="Widget.AppTheme.ActionBar" parent="Widget.AppCompat.ActionBar.Solid">
@@ -64,6 +64,17 @@
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
         <item name="android:statusBarColor">@color/colorAccent</item>
         <item name="navigationIcon">@drawable/ic_home_up</item>
+    </style>
+
+    <style name="MainAppThemeBlackBack" parent="Base.Theme.AppCompat.Light.DarkActionBar" >
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:colorForeground">@color/colorForeground</item>
+        <item name="android:navigationBarColor">@color/navigationBarColor</item>
+        <item name="android:statusBarColor">@color/colorAccent</item>
+        <item name="navigationIcon">@drawable/ic_home_up_black</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

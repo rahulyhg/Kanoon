@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.rvsoftlab.kanoon.R
 import com.rvsoftlab.kanoon.helper.Constants
 import com.rvsoftlab.kanoon.helper.Helper
@@ -23,7 +24,11 @@ class PostAdapter(private val context: Context, private val mList: ArrayList<Pos
     }
 
     class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
+        val postUserName:TextView = view.findViewById(R.id.postUserName)
+        val postUserImage: CircleImageView = view.findViewById(R.id.postUserImage)
+        val postCaption:TextView = view.findViewById(R.id.postCaption)
+        val postTime:TextView = view.findViewById(R.id.postTimeStamp)
+        val postImage:ImageView = view.findViewById(R.id.postImage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -71,6 +76,12 @@ class PostAdapter(private val context: Context, private val mList: ArrayList<Pos
     }
 
     private fun bindImagePost(holder: RecyclerView.ViewHolder, position: Int) {
+        val vh = holder as ImageViewHolder
+        vh.postUserName.text = "Anonymous"
+        vh.postCaption.text = mList[position].postText
+        Glide.with(context)
+                .load(mList[position].postImagePath)
+                .into(vh.postImage)
 
     }
 

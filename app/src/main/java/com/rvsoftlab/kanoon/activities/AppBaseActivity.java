@@ -33,6 +33,8 @@ public abstract class AppBaseActivity extends AppCompatActivity {
         fireDb = FirebaseFirestore.getInstance();
     }
 
+
+
     public void showLoading(){
         if (!progressDialog.isShowing()){
             progressDialog.show();

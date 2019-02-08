@@ -1,7 +1,7 @@
 package com.rvsoftlab.kanoon.helper
 
-import android.graphics.*
-import android.graphics.Paint.FILTER_BITMAP_FLAG
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import java.io.ByteArrayOutputStream
 
 

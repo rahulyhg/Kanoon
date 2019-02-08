@@ -3,7 +3,9 @@ package com.rvsoftlab.kanoon.activities
 import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -43,6 +45,7 @@ class MainPageActivity : AppBaseActivity() {
     private val TAG = MainPageActivity::class.simpleName
     private val DURATION_TRANSITION_MS: Long = 400
     private val ANIMATION_TRANSLATION_DURATION = 200L
+    private val REQUEST_IMAGE_POST_SHARE = 100
     private var isOpen:Boolean = false
     private var isTextMode:Boolean = false
     private var listArray:ArrayList<Posts> = ArrayList()
@@ -66,7 +69,7 @@ class MainPageActivity : AppBaseActivity() {
         user = RealmHelper.with(this).getUser()
 
         camera_preview.visibility = GONE
-
+        cameraCaptureButton.mode = CameraButton.Mode.TAP
         initViewListeners()
         initRecyclerView()
         getAllPosts()
@@ -137,15 +140,10 @@ class MainPageActivity : AppBaseActivity() {
                             ResultHolder.setImage(img)
                             ResultHolder.setNativeCaptureSize(camera_preview.captureSize)
 
-                            storage.child("/images/${user.mobile}/${UUID.randomUUID()}.png")
-                                    .putBytes(img)
-                                    .addOnSuccessListener {
-                                        camera_preview.start()
-                                    }.addOnFailureListener { e->Log.w(TAG, "Error writing document", e) }
-                                    .addOnProgressListener {
-                                        val progress = 100.0 * it.bytesTransferred / it.totalByteCount
-                                        Log.d(TAG,"$progress")
-                                    }
+
+                            val i = Intent(this@MainPageActivity,PreviewActivity::class.java)
+                            startActivityForResult(i,REQUEST_IMAGE_POST_SHARE)
+                            changeContentVisibility()
                         }
                     }
 
@@ -213,6 +211,35 @@ class MainPageActivity : AppBaseActivity() {
                 .addOnSuccessListener {
                     Log.d(TAG,"DocumentSnapshot successfully written!")
                 }.addOnFailureListener { e->Log.w(TAG, "Error writing document", e) }*/
+    }
+
+    private fun uploadImage(caption: String) {
+
+        storage.child("/images/${user.mobile}/${UUID.randomUUID()}.png")
+                .putBytes(ResultHolder.getImage()!!)
+                .addOnSuccessListener {
+                    it.storage.downloadUrl.addOnSuccessListener { it ->
+                        createImagePost(caption,it.toString())
+                    }
+                }.addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+                .addOnProgressListener {
+                    val progress = 100.0 * it.bytesTransferred / it.totalByteCount
+                    Log.d(TAG, "$progress")
+                }
+    }
+
+    private fun createImagePost(caption: String, url: String) {
+        val post = Posts()
+        post.postType = Constants.POST_TYPE.IMAGE
+        post.postText = caption
+        post.postImagePath = url
+        post.postLikeCount = 0
+        post.postCommentCount = 0
+        post.addedBy = user.mobile
+
+        postText.setText("")
+        hideKeyboard()
+        postToServer(post)
     }
 
     private fun changeContentVisibility() {
@@ -295,6 +322,21 @@ class MainPageActivity : AppBaseActivity() {
         inputManager.hideSoftInputFromWindow(this.currentFocus.windowToken,HIDE_NOT_ALWAYS)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_IMAGE_POST_SHARE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    var caption: String? = data!!.getStringExtra("caption")
+                    if (caption != null) {
+                        uploadImage(caption)
+                    }
+                }else if (resultCode == Activity.RESULT_CANCELED){
+                    ResultHolder.dispose()
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
 
 }
